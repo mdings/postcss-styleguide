@@ -1,0 +1,14 @@
+.styleguide__section
+    each example, index in examples
+        .styleguide__wrapper
+            hr.styleguide__rule
+        .styleguide__title
+            h1.styleguide__wrapper!= example.title
+                i.styleguide__icon.styleguide__icon--code(title="Toggle code" data-toggle= "code-"+index)
+        .styleguide__wrapper
+        .styleguide__wrapper
+            .styleguide__description!= example.body
+            .styleguide__example!= example.result
+            .styleguide__code(id= "code-"+index)
+                pre
+                    code(class=example.lang)!= example.template

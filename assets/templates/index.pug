@@ -1,0 +1,27 @@
+doctype html
+html
+    title= options.title
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    head
+        if options.assets.styles
+            each asset in options.assets.styles
+                link(rel="stylesheet" href= asset)
+        style
+            include ../styles/gfonts.css
+            include ../styles/style.css
+            include ../styles/prism.css
+
+    body.styleguide__body
+        nav.styleguide__nav
+            .styleguide__wrapper
+                select.styleguide__section
+                    each section in sections
+                        option(value=section.page.url)= section.page.name
+        div#styleguide__main
+
+        if options.assets.scripts
+            each asset in options.assets.scripts
+                script(src=asset data-reload)
+        script
+            include ../scripts/prism.js
+            include ../scripts/main.js
