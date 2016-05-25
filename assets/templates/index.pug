@@ -1,11 +1,14 @@
 doctype html
-html
+html.styleguide
     title= options.title
     meta(name="viewport" content="width=device-width, initial-scale=1")
     head
-        if options.assets.styles
-            each asset in options.assets.styles
-                link(rel="stylesheet" href= asset)
+        if options.src
+          link(rel="stylesheet" href= options.src)
+        if options.include
+          each asset in options.include
+            if asset.split('.').pop() == 'css'
+              link(rel="stylesheet" href= asset)
         style
             include ../styles/gfonts.css
             include ../styles/style.css
@@ -19,9 +22,10 @@ html
                         option(value=section.page.url)= section.page.name
         div#styleguide__main
 
-        if options.assets.scripts
-            each asset in options.assets.scripts
-                script(src=asset data-reload)
+        if options.include
+          each asset in options.include
+            if asset.split('.').pop() == 'js'
+              script(src=asset data-reload)
         script
             include ../scripts/prism.js
             include ../scripts/main.js

@@ -1,5 +1,10 @@
 var fs = require('fs');
 var pug = require('pug');
+var mkpath = require('mkpath');
+var Q = require('q');
+
+// promised node functions
+var nkpath = Q.denodeify(mkpath);
 
 String.prototype.toDash = function (){
   return this.trim().split(' ').join('-').toLowerCase();
@@ -31,6 +36,17 @@ var render = function (file, data) {
   return fn (data);
 }
 
+var createPath = function (path, cb) {
+  if (fsExistsSync(path)) {
+    cb();
+  } else {
+    nkpath (path)
+      .then (function() {
+        cb();
+      }.bind(this));
+  }
+}
+
 var fsExistsSync = function (myDir) {
   try {
     fs.accessSync(myDir);
@@ -45,5 +61,6 @@ module.exports = {
   write: write,
   extend: extend,
   render: render,
+  createPath: createPath,
   fsExistsSync: fsExistsSync
 }

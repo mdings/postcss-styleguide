@@ -4,46 +4,18 @@ var utils = require('./utils/utils');
 var demo = require('./utils/demo');
 var fm = require('front-matter');
 var fs = require('fs');
-var mkpath = require('mkpath');
 var Q = require('q');
 var appRoot = require('app-root-path');
 var marked = require('marked');
 
-// promised node functions
-var nkpath = Q.denodeify(mkpath);
-
-
-function Serverguide (options, sections) {
-  /* Pass everything over to PHP and generate there, yeahj! */
-  var twig = require('node-twig').renderFile;
-  var config = {
-    dir: __dirname,
-    root: appRoot.path
-  };
-
-  // add extensions if provided in options object
-  if (options.twig.extensions) {
-    config.extensions = [{
-      file: [appRoot.path, options.twig.extensions].join('/'),
-      func: 'myTwigExtension'
-    }]
-  };
-
-  options = utils.extend(options, config);
-
-  twig (sections, options, function (error, result) {
-    if (error) console.log(error);
-  });
-}
-
 /*
 Defines the Styleguide class */
-function Styleguide (options, sections) {
+function Styleguide (options, sections, css) {
   var defaults = {
     output: 'styleguide',
-    assets: {}
+    assets: {},
+    css: css
   }
-
   this.options = utils.extend (defaults, options);
   this.sections = sections;
   this.init();
@@ -52,35 +24,8 @@ function Styleguide (options, sections) {
 /*
 Creates a new styleguide instance */
 Styleguide.prototype.init = function () {
-  // check if the directory exists
-  if (utils.fsExistsSync(this.options.output)) {
-    this.copyAssets();
-    this.createIndexFile();
-    this.createSections();
-  } else {
-    nkpath (this.options.output)
-      .then (function () {
-        this.copyAssets();
-        this.createIndexFile();
-        this.createSections();
-      }.bind(this));
-  }
-}
-
-/*
-Copies assets provided in the config options to the output folder */
-Styleguide.prototype.copyAssets = function () {
-  var assets = [];
-  var options = this.options.assets;
-  if (options.styles) assets.push (options.styles);
-  if (options.scripts) assets.push (options.scripts);
-  var merged = [].concat.apply([], assets);
-
-  merged.forEach (function (asset) {
-    var from = appRoot.resolve(asset);
-    var to = [appRoot.path, this.options.output, asset.split('/').pop()].join('/');
-    utils.copy(from, to);
-  }.bind(this));
+  this.createIndexFile();
+  this.createSections();
 }
 
 /*
@@ -129,7 +74,7 @@ Styleguide.prototype.createSections = function () {
         var result = utils.render(template, data);
 
         // write the file
-        utils.write ([options.output, file].join('/'), result);
+        utils.write ([options.dest, file].join('/'), result);
       });
   });
 }
@@ -137,31 +82,36 @@ Styleguide.prototype.createSections = function () {
 module.exports = postcss.plugin ('styleguide', function styleguide (options) {
 
   return function (css, result) {
-    var sections = {}
-    options = options || {}
+    var sections = {};
+    var input = css.source.input.file;
+    options = options || {} ;
 
-    css.walkComments (function (comment) {
-      // test if comment is valid front-matter
-      if (fm.test (comment.text)) {
-        var content = fm (comment.text);
-        if (content.attributes.demo) {
-          // create the object key if it doesn't exist yet
-          var key = content.attributes.section.toDash();
-          if (!sections[key]) sections[key] = [];
-          sections[key].page = {
-            name: content.attributes.section,
-            url: key
-          };
-          sections[key].push(content);
-        } else {
-          result.warn ('Missing demo attribute');
-        }
-      }
-    });
-
-
-    new Serverguide (options, sections);
-
-    //new Styleguide (options, sections);
+    if (options.src && (input.indexOf(options.src) > -1)) {
+      // create the path to the styleguide
+      utils.createPath (options.dest, function () {
+        // write the css to the styleguide
+        utils.write ([options.dest, options.src].join('/'), css.toString());
+        // walk the css
+        css.walkComments (function (comment) {
+          // test if comment is valid front-matter
+          if (fm.test (comment.text)) {
+            var content = fm (comment.text);
+            if (content.attributes.demo) {
+              // create the object key if it doesn't exist yet
+              var key = content.attributes.section.toDash();
+              if (!sections[key]) sections[key] = [];
+              sections[key].page = {
+                name: content.attributes.section,
+                url: key
+              };
+              sections[key].push(content);
+            } else {
+              result.warn ('Missing demo attribute');
+            }
+          }
+        });
+        new Styleguide (options, sections, css);
+      }.bind(this));
+    }
   }
 })
