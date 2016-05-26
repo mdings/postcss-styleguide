@@ -16,10 +16,14 @@ html.styleguide
 
     body.styleguide__body
         nav.styleguide__nav
-            .styleguide__wrapper
-                select.styleguide__section
-                    each section in sections
-                        option(value=section.page.url)= section.page.name
+            ul
+                each page in pages
+                    li
+                        a(href=page.url+'.html')=page.name
+                        ul
+                            each section in page.sections
+                                li
+                                    a(href=[page.url+'.html', section.attributes.title.toDash()].join('#'))= section.attributes.title
         div#styleguide__main
 
         if options.include
