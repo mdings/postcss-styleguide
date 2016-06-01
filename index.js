@@ -52,7 +52,9 @@ Styleguide.prototype.createSections = function (section, page) {
 
     // push the demos in the promises array
     for (var i=0; i<demos.length; i++) {
-        var body = marked(section[i].body);
+        var body = marked(section[i].body, {
+            breaks: true
+        });
         var title = section[i].attributes.title;
         promises.push(demo(demos[i], title, body, this.options));
     }
@@ -61,6 +63,7 @@ Styleguide.prototype.createSections = function (section, page) {
     Q.all(promises)
     .then(function(values) {
         var data = {
+            title: this.pages[page].name,
             examples: values
         }
 

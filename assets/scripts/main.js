@@ -28,7 +28,6 @@ function jumpTo (section) {
 }
 
 function embed (request) {
-    console.log('embeddding');
     // if viewing page offline or the document was successfully retrieved online (status code=2000)
     if (window.location.href.indexOf("http")==-1 || request.status==200) {
         document.getElementById('styleguide__main').innerHTML = request.responseText;
@@ -49,7 +48,7 @@ function bindTogglers () {
   }
 }
 
-var links = document.querySelectorAll('.styleguide__nav a');
+var links = document.querySelectorAll('.styleguide__nav ul a');
 for (var i=0; i<links.length; i++) {
     links[i].addEventListener('click', function(e){
         var href = this.getAttribute('href');
@@ -61,6 +60,8 @@ for (var i=0; i<links.length; i++) {
 }
 
 
+// check if there is an absolute path to be reached
+if (window.location.href.substr(-1) != '/') window.location = window.location.href + '/';
 // load the first option from the dropdown by default
 var href = links[0].getAttribute('href');
 request(href);

@@ -1,8 +1,10 @@
 .styleguide__section
+    h1.styleguide__title.styleguide__title--h1= title
     each example, index in examples
-        hr.styleguide__rule
-        .styleguide__title
-            h1(id= example.title.toDash())!= example.title
+        if index > 0
+            hr.styleguide__rule
+        .styleguide__title.styleguide__title--h2
+            h2(id= example.title.toDash())!= example.title
                 i.styleguide__icon.styleguide__icon--code(title="Toggle code" data-toggle= "code-"+index)
         .styleguide__description!= example.body
         .styleguide__example!= example.result

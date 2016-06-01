@@ -16,6 +16,11 @@ html.styleguide
 
     body.styleguide__body
         nav.styleguide__nav
+            div.styleguide__credentials
+                include ../img/logo.pug
+                a(href="http://www.x-com.nl") &copy; X-com &nbsp;
+                span= new Date().getFullYear()
+            hr.styleguide__rule
             ul
                 each page in pages
                     li
@@ -24,6 +29,7 @@ html.styleguide
                             each section in page.sections
                                 li
                                     a(href=[page.url+'.html', section.attributes.title.toDash()].join('#'))= section.attributes.title
+
         div#styleguide__main
 
         if options.include
