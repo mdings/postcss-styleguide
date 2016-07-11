@@ -8,7 +8,8 @@
 
 #styleguide__main {
     width: 100%;
-    padding-left: 250px;
+    max-width: 1600px;
+    padding: 0 20px 0 220px;
 }
 
 body.styleguide__body {
@@ -23,29 +24,56 @@ body.styleguide__body {
 nav.styleguide__nav {
     padding: 0 20px;
     position: fixed;
-    width: 250px;
+    width: 200px;
     min-height: 100vh;
     font-size: 15px;
+    background: #222;
+    -webkit-box-shadow: inset -3px 0px 3px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset -3px 0px 3px 0px rgba(0,0,0,0.5);
+    box-shadow: inset -3px 0px 3px 0px rgba(0,0,0,0.5);
+}
+
+nav.styleguide__nav .styleguide__rule {
+    border-top: 1px solid #333;
+    margin-top: 25px;
+    margin-bottom: 15px;
 }
 
 .styleguide__credentials {
     font-size: 12px;
     overflow: hidden;
     margin-top: 20px;
+    color: #888;
 }
 
 .styleguide__logo {
-    display: block;
-    margin: 0;
-    padding: 0
+    display: inline-block;
+    margin: 0 20px 0 0;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
 }
 
 nav.styleguide__nav ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 nav.styleguide__nav > ul > li {
-    margin-top: 15px;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+nav.styleguide__nav > ul > li a {
+    font-size: 14px;
+    color: #999;
+    transition: color 250ms;
+}
+
+nav.styleguide__nav > ul > li a:hover {
+    color: #ccc;
 }
 
 nav.styleguide__nav > ul > li > a {
@@ -53,16 +81,16 @@ nav.styleguide__nav > ul > li > a {
 }
 
 nav.styleguide__nav ul > li > ul {
-    margin-left: 5px;
 }
 
 nav.styleguide__nav a {
     display: inline-block;
     text-decoration: none;
-    color: #555;
-    margin-top: 10px;
+    color: #888;
+    margin-top: 5px;
     font-size: 12px;
 }
+
 
 .styleguide__section {
     padding: 0 10px;
@@ -89,6 +117,10 @@ nav.styleguide__nav a {
     line-height: 1.4;
 }
 
+.styleguide__description p {
+    color: #777;
+}
+
 .styleguide__description code {
     background: rgba(0, 100, 250, 0.1);
     box-shadow: none;
@@ -104,16 +136,25 @@ nav.styleguide__nav a {
     display: none;
 }
 
+.styleguide__code code {
+    all: initial;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 .styleguide__code .token {
     text-shadow: none;
     font-size: 15px;
 }
 
 .styleguide__rule {
+    max-width: none;
+    display: block;
     border: none;
-    border-top: 1px solid #e7e7e7;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    border-top: 1px dotted #ccc;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .styleguide__icon {
@@ -128,4 +169,10 @@ nav.styleguide__nav a {
     background-position: center center;
     background-size: 40px;
     background-repeat: no-repeat;
+    opacity: 0.4;
+    transition: opacity 250ms;
+}
+
+.styleguide__icon--code:hover {
+    opacity: 0.8
 }
