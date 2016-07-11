@@ -40,7 +40,7 @@ var demo = function (demo, title, body, options) {
       };
 
       // add extensions if provided in options object
-      if (options.twig.extensions) {
+      if (options.twig && options.twig.extensions) {
         config.extensions = [{
           file: [appRoot.path, options.twig.extensions].join('/'),
           func: 'myTwigExtension'
@@ -63,6 +63,13 @@ var demo = function (demo, title, body, options) {
         var config = {
           root: appRoot.path,
           context: json,
+        };
+
+        // add extensions if provided in options object
+        if (options.php && options.php.extensions) {
+          config.extensions = [{
+            file: [appRoot.path, options.php.extensions].join('/')
+          }]
         };
 
         // php is rendered through adapted twig hanlder
