@@ -99,7 +99,7 @@ The following options are available inside the plugin
 
 option | default | description | example
 --- | --- | --- | ---
-title | '' | The title for the styleguide | My Awwesome Styleguide
+title | '' | The title for the styleguide | My Awesome Styleguide
 src | file processed by PostCSS | Optionally specify a file that should be processed (might be handy when compiling multiple files) | wireframes.css
 dest | styleguide | Output path for the styleguide | styles
 twig.extensions(*) | null | File path (relative to root) pointing to Twig-extensions | extensions.php
