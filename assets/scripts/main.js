@@ -33,6 +33,9 @@ function embed (request) {
         document.getElementById('styleguide__main').innerHTML = request.responseText;
         // reload prism
         Prism.highlightAll();
+        // re-execute JS
+        reloadJS();
+        // rebind events
         bindTogglers();
     }
 }
@@ -46,6 +49,25 @@ function bindTogglers () {
       document.getElementById(codeBlock).style.display = display;
     })
   }
+}
+
+function reloadJS() {
+    var head = document.getElementsByTagName('head')[0];
+    var reloads = document.querySelectorAll('[data-reload]');
+    var oldScripts = document.querySelectorAll('head [type="text/javascript"]');
+
+    // removing previous scripts from the page
+    for (var i=0; i<oldScripts.length; i++) {
+        head.removeChild(oldScripts[i]);
+    }
+
+    // reload the scripts from the bottom of the page
+    for (var i=0; i<reloads.length; i++) {
+        var script = document.createElement('script');
+        script.type = "text/javascript";
+        script.src = reloads[0].getAttribute('data-src');
+        head.appendChild(script);
+    }
 }
 
 var links = document.querySelectorAll('.styleguide__nav ul a');
